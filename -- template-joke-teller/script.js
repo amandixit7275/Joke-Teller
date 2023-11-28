@@ -106,10 +106,17 @@ const VoiceRSS = {
   },
 };
 
-function test() {
+//Disabled/Enabled Button
+function toggleButton() {
+  button.disabled = !button.disabled;
+}
+
+// test();
+
+function tellMe(joke) {
   VoiceRSS.speech({
     key: "559d86863f6c4071b53636e8050bb860",
-    src: "Hello, world!",
+    src: joke,
     hl: "en-us",
     v: "Linda",
     r: 0,
@@ -119,4 +126,31 @@ function test() {
   });
 }
 
-test();
+//get jokes from joke api
+
+async function getJokes() {
+  let joke = "";
+  let apiUrl =
+    "https://v2.jokeapi.dev/joke/Programming?blacklistFlags=religious,political,racist,sexist";
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    if (data.setup) {
+      joke = `${data.setup}...${data.delivery}`;
+    } else {
+      joke = data.joke;
+    }
+    //Text to speech
+    tellMe(joke);
+
+    //Disabled button
+    toggleButton();
+  } catch (error) {
+    //catch errors here
+    console.log("whoops!", error);
+  }
+}
+
+//Event Listeners
+button.addEventListener("click", getJokes);
+audioElement.addEventListener("ended", toggleButton);

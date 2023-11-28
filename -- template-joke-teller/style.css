@@ -38,7 +38,7 @@ button:active {
 }
 button:disabled {
   cursor: default;
-  filter: brightness();
+  filter: brightness(0.6);
 }
 /* Media Query : Tablt or Smallr */
 @media screen and (max-width: 1000px) {
